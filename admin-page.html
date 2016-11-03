@@ -1,0 +1,129 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="admin-icons.html">
+<link rel="import" href="admin-component.html">
+
+<!--
+
+The `admin-page` element display the available resources for an 
+adminstrator. 
+
+### Usage:
+
+The example below make 2 components (cellservices and poolusage) in-active.
+
+```html
+    <admin-page 
+        components='{"cellservices":false, "poolusage":false}'></admin-page>
+```
+
+### Styling
+
+The admin-component can be style:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--admin-page-components-theme` | Mixin applied all the components | {}
+
+@demo demo/index.html 
+-->
+
+<dom-module id="admin-page">
+  <template>
+    <style>
+      h2 {
+        text-transform: capitalize;
+        text-align: center;
+      }
+
+      .set {
+        margin: auto;
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+      }
+      
+      .container {
+        flex-grow:1;
+        border: 1px solid silver; 
+        margin: 0.5em;
+      }
+      admin-component {
+        @apply(--admin-page-components-theme);
+      }
+    </style>
+    
+      <iron-meta type="iconset" list="{{iconsets}}"></iron-meta>
+
+      <template is="dom-repeat" items="{{iconsets}}">
+        <h2>{{item.name}}</h2>
+
+        <div class="set">
+          <template is="dom-repeat" items="{{_getIconNames(item)}}">
+            <admin-component id="{{_getIds(item)}}" class="container" pipe="{{item}}"></admin-component>
+          </template>
+        </div>
+      </template>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'admin-page',
+
+      properties: {
+
+        /**
+          * An object that contains admin components to be active or not. By
+          to the
+          * By default, all components are active, that is, clicking the 
+          * component will open the component page. However a user can deactive 
+          * components by specifying them, like this:
+          *
+          *  _components='{"cellservices":false, "poolusage":false}'_.
+          *
+          * The above will make both cellservices and poolusage inactive.
+          */
+        components: {
+          type: Object,
+          value: function() {
+            return {};
+          }
+        },
+
+        /*
+         * @private
+         */
+        iconsets: {}
+      },
+
+      attached: function() {
+        var components = this.components;
+        var id;
+        var currentState;
+
+        for (id in components) {
+          currentState = components[id];
+          var selector = '#'+ id;
+          Polymer.dom(this.root).querySelector(selector).active = currentState;
+        }
+      },
+
+      /*
+       * @private
+       */
+      _getIconNames: function(component) {
+        return component.getIconNames();
+      },
+
+      /*
+       * @private
+       */
+      _getIds: function(component) {
+        var id = (component.replace("admin:", "")).replace("-", "");
+        return id;
+      }
+    });
+  </script>
+</dom-module>

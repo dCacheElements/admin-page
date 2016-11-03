@@ -1,0 +1,123 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="admin-component">
+    <template>
+        <style>
+            iron-icon {
+                transition: all 0.2s;
+                -webkit-transition: all 0.2s;
+                --iron-icon-width:32px;
+                --iron-icon-height:32px;
+                @apply(--admin-component-iron-icon-theme);
+            }
+            .container {
+                min-width: 10em;
+                text-align: center;
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                @apply(--admin-component-container-theme);
+            }
+            .container > a {
+                width:100%;
+                height:100%;
+                color: #333;
+                padding: 1em 0.5em;
+                text-decoration:none;
+                outline : 0;
+                @apply(--admin-component-container-a-theme);
+            }
+            a > div {
+                margin-top: 0.6em;
+                color: black;
+                font-size: 0.7em;
+                text-transform: capitalize;
+                @apply(--admin-component-label-theme);
+            }
+            .activeHover {
+                cursor: pointer;
+                background: #efefef;
+                @apply(--admin-component-activeHover-theme);
+            }
+            .inactiveHover {
+                cursor: default;
+                background: #e4c8ba;
+                pointer-events: none;
+                @apply(--admin-component-inactiveHover-theme);
+            }
+        </style>
+        <span id="component" class="container">
+            <a href$="{{getUrl(pipe)}}">
+                <iron-icon icon="{{pipe}}"></iron-icon>
+                <div>{{getName(pipe)}}</div>
+            </a>
+        </span>
+    </template>
+    <script>
+        Polymer({
+            is: 'admin-component',
+            properties:{
+
+                /**
+                 * @private
+                 */
+                pipe: {
+                    type: String,
+                    notify: true,
+                },
+
+                active: {
+                    type: Boolean,
+                    value: true,
+                    notify: true
+                }
+            },
+            
+            observers: [
+                '_activeStateChanged(active)'
+            ],
+            
+            attached: function() 
+            {
+                if (this.active) {
+                    this.listen(this.$.component, 'mouseover', '_mouseOver');
+                    this.listen(this.$.component, 'mouseleave', '_mouseLeave');
+                }
+            },
+
+            getName: function(component) 
+            {
+                var name = (component.replace("admin:","")).replace(/-/g," ");        
+                return name;
+            },
+
+            getUrl: function(component)
+            {
+                var href = component.replace(":", "/");
+                return href;
+            },
+
+            _mouseOver: function(e)
+            {
+                e.stopPropagation();
+                Polymer.dom(this.$.component).classList.add('activeHover');
+                e.stopPropagation();
+            },
+
+            _mouseLeave: function(e)
+            {
+                e.stopPropagation();
+                Polymer.dom(this.$.component).classList.remove('activeHover');
+                e.stopPropagation();
+            },
+
+            _activeStateChanged: function(active)
+            {
+                if (!active) {
+                    this.attached();
+                    Polymer.dom(this.$.component).classList.add('inactiveHover');
+                }
+            }
+
+        });
+    </script>
+</dom-module>
