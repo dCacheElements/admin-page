@@ -100,6 +100,7 @@
             {
                 e.stopPropagation();
                 Polymer.dom(this.$.component).classList.add('activeHover');
+                Polymer.dom(this.$.component).querySelector('iron-icon').style.color = "#f09300"
                 e.stopPropagation();
             },
 
@@ -107,6 +108,7 @@
             {
                 e.stopPropagation();
                 Polymer.dom(this.$.component).classList.remove('activeHover');
+                Polymer.dom(this.$.component).querySelector('iron-icon').style.color = "#333"
                 e.stopPropagation();
             },
 
