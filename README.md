@@ -20,3 +20,4 @@ adminstrator.
 - [ ] add animation on `admin-component` element when clicked (see paper-button as an example). 
 - [ ] add unit test.
 - [ ] more documentation.
+- [ ] replace icons with more appropriate ones
