@@ -52,18 +52,16 @@ Custom property | Description | Default
         @apply(--admin-page-components-theme);
       }
     </style>
-    
-      <iron-meta type="iconset" list="{{iconsets}}"></iron-meta>
 
-      <template is="dom-repeat" items="{{iconsets}}">
-        <h2>{{item.name}}</h2>
+    <template is="dom-repeat" items="{{iconsets}}">
+      <h2>{{item.name}}</h2>
 
-        <div class="set">
-          <template is="dom-repeat" items="{{_getIconNames(item)}}">
-            <admin-component id="{{_getIds(item)}}" class="container" pipe="{{item}}"></admin-component>
-          </template>
-        </div>
-      </template>
+      <div class="set">
+        <template is="dom-repeat" items="{{_getIconNames(item)}}">
+          <admin-component id="{{_getIds(item)}}" class="container" pipe="{{item}}"></admin-component>
+        </template>
+      </div>
+    </template>
 
   </template>
 
@@ -96,6 +94,19 @@ Custom property | Description | Default
          * @private
          */
         iconsets: {}
+      },
+
+      ready: function() {
+        meta = document.createElement('iron-meta');
+        meta.type = "iconset";
+        var ls = meta.list;
+
+        for (i in ls) {
+          if (ls[i].name == "admin") {
+            this.iconsets = [ls[i]];
+            break;
+          }
+        }
       },
 
       attached: function() {
