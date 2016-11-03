@@ -5,7 +5,8 @@
 
 _[Demo and API docs](http://dcache-elements.github.io/admin-page/)_
 
-admin page
+The `admin-page` element display the available resources for an 
+adminstrator. 
 
 ### Usage:
 
