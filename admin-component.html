@@ -40,7 +40,7 @@
             }
             .inactiveHover {
                 cursor: default;
-                background: #e4c8ba;
+                background: #bae4d4;
                 pointer-events: none;
                 @apply(--admin-component-inactiveHover-theme);
             }
@@ -117,6 +117,7 @@
                 if (!active) {
                     this.attached();
                     Polymer.dom(this.$.component).classList.add('inactiveHover');
+                    Polymer.dom(this.$.component).querySelector('iron-icon').style.color = "#7d7373";
                 }
             }
 
