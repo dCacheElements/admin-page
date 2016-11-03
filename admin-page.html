@@ -32,11 +32,9 @@ Custom property | Description | Default
 <dom-module id="admin-page">
   <template>
     <style>
-      h2 {
-        text-transform: capitalize;
-        text-align: center;
+      :host {
+        margin-top: 4px;
       }
-
       .set {
         margin: auto;
         @apply(--layout-horizontal);
@@ -47,6 +45,7 @@ Custom property | Description | Default
         flex-grow:1;
         border: 1px solid silver; 
         margin: 0.5em;
+        background: white;
       }
       admin-component {
         @apply(--admin-page-components-theme);
@@ -54,15 +53,12 @@ Custom property | Description | Default
     </style>
 
     <template is="dom-repeat" items="{{iconsets}}">
-      <h2>{{item.name}}</h2>
-
       <div class="set">
         <template is="dom-repeat" items="{{_getIconNames(item)}}">
           <admin-component id="{{_getIds(item)}}" class="container" pipe="{{item}}"></admin-component>
         </template>
       </div>
     </template>
-
   </template>
 
   <script>
