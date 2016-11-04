@@ -77,7 +77,9 @@ Custom property | Description | Default
           *
           *  _components='{"cellservices":false, "poolusage":false}'_.
           *
-          * The above will make both cellservices and poolusage inactive.
+          * The above (in the usage) will make both cellservices and poolusage 
+          * inactive. The `components attributes` of this element only accept 
+          * lowercase letters and no space or hyphen when refering to a `component`.
           */
         components: {
           type: Object,
@@ -92,10 +94,12 @@ Custom property | Description | Default
         iconsets: {}
       },
 
-      ready: function() {
+      ready: function() 
+      {
         meta = document.createElement('iron-meta');
         meta.type = "iconset";
         var ls = meta.list;
+        var i;
 
         for (i in ls) {
           if (ls[i].name == "admin") {
@@ -103,32 +107,34 @@ Custom property | Description | Default
             break;
           }
         }
-      },
 
-      attached: function() {
-        var components = this.components;
-        var id;
-        var currentState;
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          var components = this.components;
+          var key;
+          var currentState;
 
-        for (id in components) {
-          currentState = components[id];
-          var selector = '#'+ id;
-          Polymer.dom(this.root).querySelector(selector).active = currentState;
-        }
+          for (key in components) {
+            currentState = components[key];
+            var id = '#' + key;
+            Polymer.dom(this.root).querySelector(id).active = currentState;
+          }
+        }.bind(this));
       },
 
       /*
        * @private
        */
-      _getIconNames: function(component) {
+      _getIconNames: function(component) 
+      {
         return component.getIconNames();
       },
 
       /*
        * @private
        */
-      _getIds: function(component) {
-        var id = (component.replace("admin:", "")).replace("-", "");
+      _getIds: function(component) 
+      {
+        var id = (component.replace("admin:", "")).replace(/-/g, "");
         return id;
       }
     });
