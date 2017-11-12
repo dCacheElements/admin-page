@@ -106,18 +106,16 @@ Custom property | Description | Default
       ready() 
       {
         super.ready();
-        const metaList = new Polymer.IronMeta({type: 'iconset'}).list
-        let i;
-        for (i in metaList) {
-          if (metaList[i].name == "admin") {
+        const metaList = new Polymer.IronMeta({type: 'iconset'}).list;
+        for (let i in metaList) {
+          if (metaList[i].name === "admin") {
             this.iconsets = [metaList[i]];
             break;
           }
         }
 
         Polymer.RenderStatus.afterNextRender(this, () => {
-          let key;
-          for (key in this.components) {
+          for (let key in this.components) {
             this.shadowRoot.querySelector(`#${key}`).active = this.components[key];
           }
         });

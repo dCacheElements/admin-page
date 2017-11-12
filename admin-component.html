@@ -90,16 +90,16 @@
             {
                 super.connectedCallback();
                 if (this.active) {
-                    this.$.component.addEventListener('mouseover', this._mouseOver);
-                    this.$.component.addEventListener('mouseleave', this._mouseLeave);
+                    this.$.component.addEventListener('mouseover', e => this._mouseOver(e));
+                    this.$.component.addEventListener('mouseleave', e => this._mouseLeave(e));
                 }
             }
 
             disconnectedCallback() 
             {
                 super.disconnectedCallback();
-                this.$.component.removeEventListener('mouseover', this._mouseOver);
-                this.$.component.removeEventListener('mouseleave', this._mouseLeave);
+                this.$.component.removeEventListener('mouseover', e => this._mouseOver(e));
+                this.$.component.removeEventListener('mouseleave', e => this._mouseLeave(e));
             }
 
             getName(component) 
@@ -116,7 +116,7 @@
             {
                 e.stopPropagation();
                 this.$.component.classList.add('activeHover');
-                this.$.component.shadowRoot.querySelector('iron-icon').style.color = "#f09300"
+                this.$.component.querySelector('iron-icon').style.color = "#f09300";
                 e.stopPropagation();
             }
 
@@ -124,7 +124,7 @@
             {
                 e.stopPropagation();
                 this.$.component.classList.remove('activeHover');
-                this.$.component.shadowRoot.querySelector('iron-icon').style.color = "#333"
+                this.$.component.querySelector('iron-icon').style.color = "#333";
                 e.stopPropagation();
             }
 
