@@ -1,4 +1,4 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 
 <dom-module id="admin-component">
     <template>
@@ -53,74 +53,90 @@
         </span>
     </template>
     <script>
-        Polymer({
-            is: 'admin-component',
-            properties:{
-
-                /**
-                 * @private
-                 */
-                pipe: {
-                    type: String,
-                    notify: true,
-                },
-
-                active: {
-                    type: Boolean,
-                    value: true,
-                    notify: true
-                }
-            },
-            
-            observers: [
-                '_activeStateChanged(active)'
-            ],
-            
-            attached: function() 
+        class AdminComponent extends Polymer.Element
+        {
+            static get is()
             {
+                return 'admin-component';
+            }
+
+            static get properties()
+            {
+                return {
+                    /**
+                     * @private
+                     */
+                    pipe: {
+                        type: String,
+                        notify: true,
+                    },
+
+                    active: {
+                        type: Boolean,
+                        value: true,
+                        notify: true
+                    }
+                }   
+            }
+            
+            static get observers()
+            {
+                return [
+                    '_activeStateChanged(active)'
+                ]
+            }
+            
+            connectedCallback() 
+            {
+                super.connectedCallback();
                 if (this.active) {
-                    this.listen(this.$.component, 'mouseover', '_mouseOver');
-                    this.listen(this.$.component, 'mouseleave', '_mouseLeave');
-                }
-            },
-
-            getName: function(component) 
-            {
-                var name = (component.replace("admin:","")).replace(/-/g," ");        
-                return name;
-            },
-
-            getUrl: function(component)
-            {
-                var href = component.replace(":", "/");
-                return href;
-            },
-
-            _mouseOver: function(e)
-            {
-                e.stopPropagation();
-                Polymer.dom(this.$.component).classList.add('activeHover');
-                Polymer.dom(this.$.component).querySelector('iron-icon').style.color = "#f09300"
-                e.stopPropagation();
-            },
-
-            _mouseLeave: function(e)
-            {
-                e.stopPropagation();
-                Polymer.dom(this.$.component).classList.remove('activeHover');
-                Polymer.dom(this.$.component).querySelector('iron-icon').style.color = "#333"
-                e.stopPropagation();
-            },
-
-            _activeStateChanged: function(active)
-            {
-                if (!active) {
-                    this.attached();
-                    Polymer.dom(this.$.component).classList.add('inactiveHover');
-                    Polymer.dom(this.$.component).querySelector('iron-icon').style.color = "#7d7373";
+                    this.$.component.addEventListener('mouseover', this._mouseOver);
+                    this.$.component.addEventListener('mouseleave', this._mouseLeave);
                 }
             }
 
-        });
+            disconnectedCallback() 
+            {
+                super.disconnectedCallback();
+                this.$.component.removeEventListener('mouseover', this._mouseOver);
+                this.$.component.removeEventListener('mouseleave', this._mouseLeave);
+            }
+
+            getName(component) 
+            {
+                return (component.replace("admin:","")).replace(/-/g," ");
+            }
+
+            getUrl(component)
+            {
+                return component.replace(":", "/");
+            }
+
+            _mouseOver(e)
+            {
+                e.stopPropagation();
+                this.$.component.classList.add('activeHover');
+                this.$.component.shadowRoot.querySelector('iron-icon').style.color = "#f09300"
+                e.stopPropagation();
+            }
+
+            _mouseLeave(e)
+            {
+                e.stopPropagation();
+                this.$.component.classList.remove('activeHover');
+                this.$.component.shadowRoot.querySelector('iron-icon').style.color = "#333"
+                e.stopPropagation();
+            }
+
+            _activeStateChanged(active)
+            {
+                if (!active) {
+                    this.connectedCallback();
+                    this.$.component.classList.add('inactiveHover');
+                    this.$.component.querySelector('iron-icon').style.color = "#7d7373";
+                }
+            }
+        }
+        window.customElements.define(AdminComponent.is, AdminComponent)
     </script>
 </dom-module>
