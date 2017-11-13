@@ -46,7 +46,7 @@
             }
         </style>
         <span id="component" class="container">
-            <a href$="{{getUrl(pipe)}}">
+            <a on-tap="getUrl">
                 <iron-icon icon="{{pipe}}"></iron-icon>
                 <div>{{getName(pipe)}}</div>
             </a>
@@ -75,18 +75,22 @@
                         type: Boolean,
                         value: true,
                         notify: true
+                    },
+                    baseUrl: {
+                        type: String,
+                        value: '/'
                     }
-                }   
+                }
             }
-            
+
             static get observers()
             {
                 return [
                     '_activeStateChanged(active)'
                 ]
             }
-            
-            connectedCallback() 
+
+            connectedCallback()
             {
                 super.connectedCallback();
                 if (this.active) {
@@ -95,21 +99,27 @@
                 }
             }
 
-            disconnectedCallback() 
+            disconnectedCallback()
             {
                 super.disconnectedCallback();
                 this.$.component.removeEventListener('mouseover', e => this._mouseOver(e));
                 this.$.component.removeEventListener('mouseleave', e => this._mouseLeave(e));
             }
 
-            getName(component) 
+            getName(component)
             {
                 return (component.replace("admin:","")).replace(/-/g," ");
             }
 
-            getUrl(component)
+            getUrl()
             {
-                return component.replace(":", "/");
+                this.dispatchEvent(new CustomEvent('admin-component-url-path',
+                    {
+                        bubbles: true,
+                        composed: true,
+                        detail: {path: `${this.baseUrl}${this.pipe.replace(":", "/")}`}
+                    })
+                );
             }
 
             _mouseOver(e)
